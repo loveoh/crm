@@ -1,6 +1,7 @@
 package com.kaishengit.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 刘忠伟 on 2017/3/15.
@@ -23,6 +24,11 @@ public class Customer implements Serializable {
     private String companyname;//公司名称，是公司就没有客户名称
     private String level;
     private String type;
+
+    //一对多，sales销售机会 TODO
+    //private List<Sales> salesList;
+
+
 
     public Integer getId() {
         return id;

@@ -17,6 +17,19 @@
          email=#{email},userid=#{userid}, companyid=#{companyid}, companyname=#{companyname},
          level=#{level}, type=#{type} WHERE id = #{id}
     </update>
+    <!--delete by id-->
+    <delete id="deleteById">
+        
+        DELETE FROM t_customer WHERE id = #{id}
+        
+    </delete>
+
+    <!--delete by companyid-->
+    <delete id="deleteByCompanyId">
+
+        DELETE FROM t_customer WHERE companyid = #{companyid}
+
+    </delete>
 
     <!--select by search-->
     <select id="findBySearch" resultType="Customer">

@@ -7,6 +7,7 @@ import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new NotFoundException();
             }
         }
-        //TODO 添加当前用户（员工）的id    shiro
+
         customer.setUserid(ShiroUtil.getCurrentUserId());
 
         customerMapper.save(customer);
@@ -109,6 +110,30 @@ public class CustomerServiceImpl implements CustomerService {
         //个人，  无companyid，companyname，修改的是个人name
 
         customerMapper.update(customer);
+
+
+    }
+
+    /**
+     * 删除，  公司的话删除全部关联的
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        Customer customer = customerMapper.findById(id);
+
+        if(customer != null){
+            //1删除客户或者公司
+            customerMapper.deleteById(id);
+
+            if("company".equals(customer.getType())){
+                //2删除公司的关联
+                customerMapper.deleteByCompanyId(customer.getId());
+            }
+        } else {
+            throw new NotFoundException();
+        }
 
 
     }

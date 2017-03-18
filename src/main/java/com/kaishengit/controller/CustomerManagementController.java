@@ -128,6 +128,30 @@ public class CustomerManagementController {
     }
 
 
+    /**
+     * 删除 ，     公司的话和删除所有关联的
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id:\\d+}/del")
+    @ResponseBody
+    public AjaxResult del(@PathVariable Integer id){
+
+        customerService.delete(id);
+
+        return new AjaxResult(AjaxResult.SUCCESS,"删除成功！");
+    }
+
+
+    /**
+     * 根据id查找，并且展示
+     */
+    @GetMapping("{id:\\d+}")
+    public String show(@PathVariable Integer id){
+
+
+        return "customer/show";
+    }
 
 
 }
