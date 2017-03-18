@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -258,7 +259,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 {"data":function (row) {
 
-                        return "<a href='javascript:;' rel='" + row.id + "' class='editLink'>编辑</a>";
+                        return "<a href='javascript:;' rel='" + row.id + "' class='editLink'>编辑</a> " <shiro:hasRole name="经理"> +"  <a href='javascript:;' class='delLink' rel='"+ row.id +"'>删除</a>"</shiro:hasRole>;
 
                         /*return "<a href='#'>删除</a>";  这一步分需要shiro权限的支持，只有经理才能删除用户*/
 
@@ -513,6 +514,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $("#editBtn").click(function () {
             $("#editForm").submit();
         });
+
+
+        //删除客户，经理权限
+        <shiro:hasRole name="经理">
+
+            $(document).delegate(".delLink","click",function () {
+                var id = $(this).attr("rel");
+
+                layer.confirm('如果是公司会自动删除关联数据，您确定要删除吗?', function(index){
+                    //do something
+                    
+                    layer.close(index);
+                });
+                $.get("",function () {
+
+
+                });
+
+            });
+
+        </shiro:hasRole>
+
+
     });
 
 </script>

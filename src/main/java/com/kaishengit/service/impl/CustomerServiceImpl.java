@@ -4,6 +4,7 @@ import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.CustomerMapper;
 import com.kaishengit.pojo.Customer;
 import com.kaishengit.service.CustomerService;
+import com.kaishengit.shiro.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
         //TODO 添加当前用户（员工）的id    shiro
-
+        customer.setUserid(ShiroUtil.getCurrentUserId());
 
         customerMapper.save(customer);
 
