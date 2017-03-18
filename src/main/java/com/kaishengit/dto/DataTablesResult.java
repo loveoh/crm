@@ -44,6 +44,9 @@ public class DataTablesResult<T> {
         this.recordsFiltered = recordsFiltered;
     }
 
+    public DataTablesResult() {
+    }
+
     public DataTablesResult(String draw, List<T> data, Long recordsTotal, Long recordsFiltered) {
 
         this.draw = draw;
