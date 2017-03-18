@@ -1,6 +1,6 @@
 package com.kaishengit.shiro;
 
-import com.kaishengit.mapper.RoleMapper;
+
 import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.Role;
 import com.kaishengit.pojo.User;
@@ -39,7 +39,9 @@ public class ShiroDbRelm extends AuthorizingRealm {
         User user = (User) principalCollection.getPrimaryPrincipal();
         //2查询此对象对应的角色。最好要封装到authorizationInfo对象里面，才返回
         User user1 = userMapper.findById(user.getId());
-        List<Role> roleList = user1.getRoleList();
+
+
+        /*List<Role> roleList = user1.getRoleList();
         if(!roleList.isEmpty()){
             //创建authorizationInfo对象，返回父类，可以返回子类对象
             SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
@@ -48,7 +50,7 @@ public class ShiroDbRelm extends AuthorizingRealm {
             }
             //把一个user对应的所有的roleName都装给authorizationInfo对象。返回，在jsp使用shiro标签调用时返回。并且自动判断是否包含
             return authorizationInfo;
-        }
+        }*/
         //是空就返回null
         return null;
     }
@@ -72,7 +74,7 @@ public class ShiroDbRelm extends AuthorizingRealm {
 
         if(user != null){
             //用户存在就去验证密码
-            return new SimpleAuthenticationInfo(user,user.getPassWord(),getName());
+            return new SimpleAuthenticationInfo(user,user.getPassword(),getName());
             //这个方法返回null就表示那边抛出异常。
             //第一个参数user，是传入session的值。方法内部将user对象放入session。可以在客户端使用shiro标签获取session。就是这第一个参数
             //第二个参数，。是找到的对象的密码，
