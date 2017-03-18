@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by loveoh on 2017/3/15.
@@ -36,7 +35,7 @@ public class HomeContorller {
     }
 
     @PostMapping
-    public String login (String name, String password,
+    public String login (String username, String password,
                          HttpServletRequest request,RedirectAttributes redirectAttributes){
 
         Subject subject = SecurityUtils.getSubject();
@@ -44,13 +43,13 @@ public class HomeContorller {
         try {
             //使用MD5对密码进行加密存储
             UsernamePasswordToken usernamePasswordToken =
-                    new UsernamePasswordToken(name, DigestUtils.md5Hex(password));
+                    new UsernamePasswordToken(username, DigestUtils.md5Hex(password));
             subject.login(usernamePasswordToken);
 
             //获取当前登录的IP，记录用户登录记录
 
             String ip = IPUtil.getIp(request);
-           User user = ShiroUtil.getCurrentUser();
+            User user = ShiroUtil.getCurrentUser();
             userService.saveLoginLog(ip,user);
 
             return "/home";
@@ -65,9 +64,9 @@ public class HomeContorller {
     }
 
     @GetMapping("/logout")
-    public String logout (HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.invalidate();
+    public String logout (RedirectAttributes redirectAttributes){
+       SecurityUtils.getSubject().logout();
+        redirectAttributes.addFlashAttribute("message","你已安全退出");
         return "redirect:/";
     }
 

@@ -74,7 +74,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/plugins/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
 <script>
+    $(function () {
+        var table = $("#table").dataTable({
+            "searching":false,//不使用自带的搜索功能
+            "ajax":{
+                "url":"/user/ip/list/load",
+                "type": "get"
+            },
 
+            "columns":[
+                {"data":"ip"},
+                {"data":"createTime"}
+            ],
+            "language":{ //定义中文
+                "search": "搜索:",
+                "zeroRecords":    "没有匹配的数据",
+                "lengthMenu":     "显示 _MENU_ 条数据",
+                "info":           "显示从 _START_ 到 _END_ 条数据 共 _TOTAL_ 条数据",
+                "infoFiltered":   "(从 _MAX_ 条数据中过滤得来)",
+                "loadingRecords": "加载中...",
+                "processing":     "处理中...",
+                "paginate": {
+                    "first":      "首页",
+                    "last":       "末页",
+                    "next":       "下一页",
+                    "previous":   "上一页"
+                }
+            }
+
+
+
+        })
+    })
+    
 </script>
 </body>
 </html>

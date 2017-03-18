@@ -7,7 +7,7 @@
 <mapper namespace="com.kaishengit.mapper.UserMapper">
 
     <insert id="saveLoginLog">
-        INSERT into t_login_log (ip,userid) VALUES (#{param1,#{param2})
+        INSERT into t_login_log (ip,userid) VALUES (#{param1},#{param2})
     </insert>
     <update id="resetPassword">
         UPDATE t_user set password = #{password} where id = #{id}
@@ -20,5 +20,12 @@
 
     <select id="findByName" resultType="com.kaishengit.pojo.User">
         SELECT * FROM t_user WHERE username = #{userName}
+    </select>
+
+    <select id="findLoginLogByQueryParam" resultType="com.kaishengit.pojo.LoginLog">
+        SELECT * FROM  t_login_log limit ${start},${length}
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        SELECT count(*) FROM t_login_log
     </select>
 </mapper>

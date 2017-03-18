@@ -35,14 +35,15 @@
             进入权限之外的jsp显示内容。解决办法：在权限配置中，使用roles[role_admin]来限制当前登录对象的角色当中一定要有role_admin没有就不让反问。有才可以访问
             -->
             <value>
-                /static/** = anon
+                /** = anon
+               <!-- /static/** = anon
                 /weixin/init=anon
                 /user/**=roles[role_admin]
                 /setting/**=roles[role_admin]
                 /business/**=roles[role_sales]
                 /disk/**=roles[role_dev]
                 /finance/**=roles[role_fin]
-                /** = authc
+                /** = authc-->
             </value>
         </property>
     </bean>

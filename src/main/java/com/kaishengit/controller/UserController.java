@@ -1,6 +1,8 @@
 package com.kaishengit.controller;
 
 import com.kaishengit.dto.AjaxRseult;
+import com.kaishengit.dto.DataTablesResult;
+import com.kaishengit.pojo.LoginLog;
 import com.kaishengit.pojo.User;
 import com.kaishengit.service.UserService;
 import com.kaishengit.shiro.ShiroUtil;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by loveoh on 2017/3/17.
@@ -55,5 +60,31 @@ public class UserController {
        userService.resetUserPassword(password);
 
         return new AjaxRseult(AjaxRseult.SUCCESS);
+    }
+
+    /**
+     * 跳转到用户IP 列表
+     * @return
+     */
+    @RequestMapping(value = "/log",method = RequestMethod.GET)
+    public String logList(){
+        return "setting/loglist";
+    }
+
+
+    /**
+     * 使用datatables显示IP 列表
+     * @return
+     */
+    @RequestMapping(value = "/ip/list/load",method = RequestMethod.GET)
+    public DataTablesResult<LoginLog> IpList(HttpServletRequest request){
+        String draw = request.getParameter("draw");
+        String start = request.getParameter("start");
+        String length = request.getParameter("length");
+
+        List<LoginLog> loginLogList = userService.findLoginLogByQueryParam(start,length);
+        Long count = userService.count();
+
+        return new DataTablesResult<LoginLog>(draw,count,count,loginLogList);
     }
 }
