@@ -36,8 +36,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <section class="content-header">
             <h1>　</h1>
             <ol class="breadcrumb">
-                <li><a href="/customer"><i class="fa fa-dashboard"></i> 客户列表</a></li>
-                <li class="active">${customer.name}</li>
+                <li><a href="/customerManagement"><i class="fa fa-dashboard"></i> 客户列表</a></li>
+                <li class="active">
+                <c:choose>
+                    <c:when test="${customer.type == 'company'}">
+                        ${customer.companyname}
+                    </c:when>
+                    <c:otherwise>
+                        ${customer.name}
+                    </c:otherwise>
+                </c:choose>
+                </li>
             </ol>
         </section>
 
@@ -48,14 +57,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="box-header">
                     <h3 class="box-title">
                         <c:choose>
-                            <c:when test="${customer.type == 'person'}">
+                            <c:when test="${customer.type == 'customer'}">
                                 <i class="fa fa-user"></i>
+                                ${customer.name}
                             </c:when>
                             <c:otherwise>
                                 <i class="fa fa-bank"></i>
+                                ${customer.companyname}
                             </c:otherwise>
                         </c:choose>
-                        ${customer.name}
+
                     </h3>
                     <div class="box-tools">
                         <c:if test="${not empty customer.userid}">
@@ -76,14 +87,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </tr>
                         <tr>
                             <td>等级</td>
-                            <td style="color: #ff7400">${customer.level}</td>
+                            <td style="color: #ff7400">
+                                <c:if test="${customer.level == 1}">
+                                    ★
+                                </c:if>
+                                <c:if test="${customer.level == 2}">
+                                    ★★
+                                </c:if>
+                                <c:if test="${customer.level == 3}">
+                                    ★★★
+                                </c:if>
+                                <c:if test="${customer.level == 4}">
+                                    ★★★★
+                                </c:if>
+                                <c:if test="${customer.level == 5}">
+                                    ★★★★★
+                                </c:if>
+                            </td>
                             <td>地址</td>
                             <td colspan="3">${customer.address}</td>
                         </tr>
                         <c:if test="${not empty customer.companyid}">
                             <tr>
                                 <td>所属公司</td>
-                                <td colspan="5"><a href="/customer/${customer.companyid}">${customer.companyname}</a></td>
+                                <td colspan="5"><a href="/customerManagement/${customer.companyid}">${customer.companyname}</a></td>
                             </tr>
                         </c:if>
                         <c:if test="${not empty customerList}">
@@ -91,7 +118,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <td>关联客户</td>
                                 <td colspan="5">
                                     <c:forEach items="${customerList}" var="cust">
-                                        <a href="/customer/${cust.id}"> ${cust.name} </a>
+                                        <a href="/customerManagement/${cust.id}"> ${cust.name} </a>
                                     </c:forEach>
                                 </td>
                             </tr>

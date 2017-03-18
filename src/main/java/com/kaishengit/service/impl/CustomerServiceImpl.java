@@ -5,6 +5,7 @@ import com.kaishengit.mapper.CustomerMapper;
 import com.kaishengit.pojo.Customer;
 import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
 
     /**
-     * 查询Customer客户信息
+     * 查询Customer客户信息，本登录对象的客户
      * @param start  起始行
      * @param length  查多少个
      * @param search  查询关键字，根据手机号或者name，like查询
@@ -31,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getCustomer(Integer start, Integer length, String search) {
 
-        return customerMapper.findBySearch(start,length,search);
+        return customerMapper.findBySearch(start,length,search,ShiroUtil.getCurrentUserId());
 
     }
 
@@ -42,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Integer getCustomerCount(String search) {
-        return customerMapper.findBySearchCount(search);
+        return customerMapper.findBySearchCount(search,ShiroUtil.getCurrentUserId());
     }
 
     /**
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public List<Customer> findCompany() {
-        return customerMapper.findCompanyAll();
+        return customerMapper.findCompanyAll(ShiroUtil.getCurrentUserId());
 
     }
 
@@ -64,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if("customer".equals(customer.getType()) && customer.getCompanyid()!= null) {//个人+公司
 
-            Customer customer1 = customerMapper.findCompanyById(customer.getCompanyid());
+            Customer customer1 = customerMapper.findCompanyById(customer.getCompanyid(),ShiroUtil.getCurrentUserId());
             if (customer1 != null) {
                 customer.setCompanyname(customer1.getCompanyname());
             } else {
@@ -85,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Customer findById(Integer id) {
-        return customerMapper.findById(id);
+        return customerMapper.findById(id,ShiroUtil.getCurrentUserId());
     }
 
     /**
@@ -99,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if("customer".equals(customer.getType())&&customer.getCompanyid()!= null){
             //个人-公司，有companyid，companyname,并且根据companyid查到companyname,修改的是个人名字
-            Customer customer2 = customerMapper.findCompanyById(customer.getCompanyid());
+            Customer customer2 = customerMapper.findCompanyById(customer.getCompanyid(),ShiroUtil.getCurrentUserId());
             if (customer2 != null) {
                 customer.setCompanyname(customer2.getCompanyname());
             } else {
@@ -121,7 +122,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        Customer customer = customerMapper.findById(id);
+        Customer customer = customerMapper.findById(id,ShiroUtil.getCurrentUserId());
 
         if(customer != null){
             //1删除客户或者公司
@@ -136,6 +137,29 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
 
+    }
+
+    /**
+     * show展示客户详情---关联销售机会，待办事项，电子名片。三个关系维护
+     * @param id
+     * @return
+     */
+    @Override
+    public Customer findCustomer(Integer id) {
+
+
+        return customerMapper.findCustomer(id,ShiroUtil.getCurrentUserId());
+
+    }
+
+    /**
+     * 查询此公司关联所有客户
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Customer> findByCompanyId(Integer id) {
+        return customerMapper.findCustomerByCompanyId(id,ShiroUtil.getCurrentUserId());
     }
 
 

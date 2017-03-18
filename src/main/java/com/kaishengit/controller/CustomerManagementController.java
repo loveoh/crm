@@ -6,10 +6,12 @@ import com.kaishengit.dto.DataTablesResult;
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.pojo.Customer;
 import com.kaishengit.service.CustomerService;
+import com.sun.javafx.sg.prism.NGShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -147,9 +149,16 @@ public class CustomerManagementController {
      * 根据id查找，并且展示
      */
     @GetMapping("{id:\\d+}")
-    public String show(@PathVariable Integer id){
+    public String show(@PathVariable Integer id, Model model){
 
+        Customer customer = customerService.findCustomer(id);
 
+        //如果是公司，则返回所有关联用户
+        if("company".equals(customer.getType())){
+            model.addAttribute("customerList",customerService.findByCompanyId(id));
+        }
+
+        model.addAttribute("customer",customer);
         return "customer/show";
     }
 

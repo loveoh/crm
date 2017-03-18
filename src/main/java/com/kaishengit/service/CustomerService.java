@@ -22,4 +22,8 @@ public interface CustomerService {
     void eidtCustomer(Customer customer);
 
     void delete(Integer id);
+
+    Customer findCustomer(Integer id);
+
+    List<Customer> findByCompanyId(Integer id);
 }

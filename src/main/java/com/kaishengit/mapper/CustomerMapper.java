@@ -16,19 +16,24 @@ public interface CustomerMapper {
 
     List<Customer> findBySearch(@Param("start") Integer start,
                                 @Param("length") Integer length,
-                                @Param("search") String search);
+                                @Param("search") String search,
+                                @Param("userid") Integer userid);
 
-    Integer findBySearchCount(@Param("search") String search);
+    Integer findBySearchCount(@Param("search") String search, @Param("userid") Integer userid);
 
-    List<Customer> findCompanyAll();
+    List<Customer> findCompanyAll(Integer userid);
 
-    Customer findCompanyById(Integer companyid);
+    Customer findCompanyById(@Param("companyid") Integer companyid,@Param("userid")Integer userid);
 
-    Customer findById(Integer id);
+    Customer findById(@Param("id") Integer id, @Param("userid") Integer userid);
 
     void update(Customer customer);
 
     void deleteById(Integer id);
 
     void deleteByCompanyId(Integer companyid);
+
+    Customer findCustomer(@Param("id") Integer id, @Param("userid") Integer userid);
+
+    List<Customer> findCustomerByCompanyId(@Param("id") Integer id, @Param("userid") Integer userid);
 }

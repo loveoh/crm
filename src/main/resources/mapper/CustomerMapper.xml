@@ -41,6 +41,7 @@
                 tel LIKE concat(concat('%',#{search}),'%') OR name LIKE concat(concat('%',#{search}),'%')
                 OR companyname LIKE concat(concat('%',#{search}),'%')
             </if>
+            and userid = #{userid}
         </where>
         ORDER BY id DESC
 
@@ -56,6 +57,7 @@
                 tel LIKE concat(concat('%',#{search}),'%') OR name LIKE concat(concat('%',#{search}),'%')
                 OR companyname LIKE concat(concat('%',#{search}),'%')
             </if>
+            and userid = #{userid}
         </where>
 
     </select>
@@ -64,17 +66,68 @@
     <select id="findCompanyAll" resultType="com.kaishengit.pojo.Customer">
         SELECT id,name, tel, weixin, address, email, createtime,
         userid, companyid, companyname, level, type FROM  t_customer WHERE type = 'company'
+        and userid = #{userid}
     </select>
 
     <!--根据companyid查找公司-->
     <select id="findCompanyById" resultType="com.kaishengit.pojo.Customer">
         SELECT id,name, tel, weixin, address, email, createtime,
         userid, companyid, companyname, level, type FROM  t_customer WHERE type = 'company' and id = #{companyid}
+        and userid = #{userid}
     </select>
     <select id="findById" resultType="com.kaishengit.pojo.Customer">
         SELECT id,name, tel, weixin, address, email, createtime,
-        userid, companyid, companyname, level, type FROM  t_customer WHERE  id = #{id}
+        userid, companyid, companyname, level, type FROM  t_customer WHERE  id = #{id} and userid = #{userid}
     </select>
 
+    <select id="findCustomerByCompanyId" resultType="com.kaishengit.pojo.Customer">
+    SELECT id,name, tel, weixin, address, email, createtime,
+        userid, companyid, companyname, level, type FROM  t_customer WHERE  companyid = #{id} and userid = #{userid}
+    </select>
+
+    <!--id  多表联查-->
+    <select id="findCustomer" resultMap="map">
+
+      select * from t_customer left join t_items on t_customer.id = t_items.customerid
+
+      left join t_sales on t_customer.id = t_sales.custmoerid WHERE t_customer.id = #{id} and t_customer.userid = #{userid}
+
+    </select>
+
+
+    <resultMap id="map" type="Customer">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="tel" column="tel"/>
+        <result property="weixin" column="weixin"/>
+        <result property="address" column="address"/>
+        <result property="email" column="email"/>
+        <result property="createtime" column="createtime"/>
+        <result property="userid" column="userid"/>
+        <result property="companyid" column="companyid"/>
+        <result property="companyname" column="companyname"/>
+        <result property="level" column="level"/>
+        <result property="type" column="type"/>
+
+        <!--Items待办事项-->
+        <collection property="itemsList" ofType="com.kaishengit.pojo.Items">
+            <id property="id" column="id"/>
+            <result property="title" column="title"/>
+            <result property="createTime" column="create_time"/>
+            <result property="createUser" column="create_user"/>
+            <result property="startTime" column="start_time"/>
+            <result property="endTime" column="end_time"/>
+            <result property="color" column="color"/>
+            <result property="done" column="done"/>
+            <result property="customerid" column="customerid"/>
+            <result property="salesid" column="salesid"/>
+            <result property="userid" column="userid"/>
+        </collection>
+
+        <!--sales销售机会-->
+        <!--<collection property="salesList" ofType="com.kaishengit.pojo.Sales">
+            <id property="id" column="id"/>
+        </collection>-->
+    </resultMap>
 
 </mapper>
