@@ -13,6 +13,7 @@ public class User {
     private String createtime;
     private Boolean enable;
     private Integer roleid;
+
     private Role role;
 
     public Integer getId() {

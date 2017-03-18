@@ -4,18 +4,15 @@ package com.kaishengit.shiro;
 import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.Role;
 import com.kaishengit.pojo.User;
+import com.kaishengit.service.RoleService;
 import com.kaishengit.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by 刘忠伟 on 2017/1/19.
@@ -26,6 +23,8 @@ import java.util.List;
 public class ShiroDbRelm extends AuthorizingRealm {
 
 
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -38,22 +37,23 @@ public class ShiroDbRelm extends AuthorizingRealm {
         //第一步需要获取，当前登录对象
         User user = (User) principalCollection.getPrimaryPrincipal();
         //2查询此对象对应的角色。最好要封装到authorizationInfo对象里面，才返回
-        User user1 = userMapper.findById(user.getId());
+        Role role = roleService.findRoleByRoleId(user.getRoleid());
 
 
-        /*List<Role> roleList = user1.getRoleList();
-        if(!roleList.isEmpty()){
-            //创建authorizationInfo对象，返回父类，可以返回子类对象
+        if (!user.getRealname().isEmpty()) {
             SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-            for(Role role:roleList){
-                authorizationInfo.addRole(role.getRoleName());
-            }
             //把一个user对应的所有的roleName都装给authorizationInfo对象。返回，在jsp使用shiro标签调用时返回。并且自动判断是否包含
+
+            authorizationInfo.addRole(role.getViewName());
+
             return authorizationInfo;
-        }*/
-        //是空就返回null
+        }
         return null;
+
     }
+
+
+
 
 
     /**

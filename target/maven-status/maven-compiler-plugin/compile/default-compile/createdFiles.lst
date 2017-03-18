@@ -1,4 +1,5 @@
 com\kaishengit\controller\WeiXinController.class
+com\kaishengit\service\impl\RoleServiceImpl.class
 com\qq\weixin\mp\aes\SHA1.class
 com\kaishengit\shiro\ShiroDbRelm.class
 com\kaishengit\pojo\LoginLog.class
@@ -7,6 +8,7 @@ com\kaishengit\shiro\ShiroUtil.class
 com\kaishengit\exception\ServiceException.class
 com\kaishengit\dto\AjaxRseult.class
 com\kaishengit\exception\NotFoundException.class
+com\kaishengit\service\RoleService.class
 com\kaishengit\pojo\User.class
 com\kaishengit\util\IPUtil.class
 com\kaishengit\service\UserService.class
@@ -14,6 +16,7 @@ com\qq\weixin\mp\aes\PKCS7Encoder.class
 com\kaishengit\pojo\Role.class
 com\kaishengit\controller\HomeContorller.class
 com\qq\weixin\mp\aes\ByteGroup.class
+com\kaishengit\mapper\RoleMapper.class
 com\kaishengit\dto\DataTablesResult.class
 com\qq\weixin\mp\aes\XMLParse.class
 com\qq\weixin\mp\aes\AesException.class

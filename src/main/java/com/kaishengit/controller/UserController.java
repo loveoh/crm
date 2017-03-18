@@ -77,7 +77,8 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/ip/list/load",method = RequestMethod.GET)
-    public DataTablesResult<LoginLog> IpList(HttpServletRequest request){
+    @ResponseBody
+    public DataTablesResult<LoginLog> load(HttpServletRequest request){
         String draw = request.getParameter("draw");
         String start = request.getParameter("start");
         String length = request.getParameter("length");
@@ -85,6 +86,6 @@ public class UserController {
         List<LoginLog> loginLogList = userService.findLoginLogByQueryParam(start,length);
         Long count = userService.count();
 
-        return new DataTablesResult<LoginLog>(draw,count,count,loginLogList);
+        return new DataTablesResult<LoginLog>(draw,loginLogList,count,count);
     }
 }

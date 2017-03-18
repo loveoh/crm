@@ -8,9 +8,9 @@ import java.util.List;
 public class DataTablesResult<T> {
 
     private String draw;
-    private Long filterCount;
-    private Long count;
-    private List<T> list;
+    private List<T> data;
+    private Long recordsTotal;
+    private Long recordsFiltered;
 
     public String getDraw() {
         return draw;
@@ -20,35 +20,35 @@ public class DataTablesResult<T> {
         this.draw = draw;
     }
 
-    public Long getFilterCount() {
-        return filterCount;
+    public List<T> getData() {
+        return data;
     }
 
-    public void setFilterCount(Long filterCount) {
-        this.filterCount = filterCount;
+    public void setData(List<T> data) {
+        this.data = data;
     }
 
-    public Long getCount() {
-        return count;
+    public Long getRecordsTotal() {
+        return recordsTotal;
     }
 
-    public void setCount(Long count) {
-        this.count = count;
+    public void setRecordsTotal(Long recordsTotal) {
+        this.recordsTotal = recordsTotal;
     }
 
-    public List<T> getList() {
-        return list;
+    public Long getRecordsFiltered() {
+        return recordsFiltered;
     }
 
-    public void setList(List<T> list) {
-        this.list = list;
+    public void setRecordsFiltered(Long recordsFiltered) {
+        this.recordsFiltered = recordsFiltered;
     }
 
-    public DataTablesResult(String draw, Long filterCount, Long count, List<T> list) {
+    public DataTablesResult(String draw, List<T> data, Long recordsTotal, Long recordsFiltered) {
 
         this.draw = draw;
-        this.filterCount = filterCount;
-        this.count = count;
-        this.list = list;
+        this.data = data;
+        this.recordsTotal = recordsTotal;
+        this.recordsFiltered = recordsFiltered;
     }
 }

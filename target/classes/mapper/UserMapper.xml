@@ -23,7 +23,7 @@
     </select>
 
     <select id="findLoginLogByQueryParam" resultType="com.kaishengit.pojo.LoginLog">
-        SELECT * FROM  t_login_log limit ${start},${length}
+        SELECT * FROM  t_login_log limit ${param1},${param2}
     </select>
     <select id="count" resultType="java.lang.Long">
         SELECT count(*) FROM t_login_log

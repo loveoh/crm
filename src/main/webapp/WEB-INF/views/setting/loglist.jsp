@@ -75,16 +75,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
 <script>
     $(function () {
-        var table = $("#table").dataTable({
+        var dataTable = $("#logTable").DataTable({
             "searching":false,//不使用自带的搜索功能
+            "serverSide":true,//表示向服务端发送请求
+
             "ajax":{
                 "url":"/user/ip/list/load",
-                "type": "get"
+                "type": "get",
+
             },
 
-            "columns":[
-                {"data":"ip"},
-                {"data":"createTime"}
+            columns:[
+                {"data":"createTime"},
+                {"data":"ip"}
             ],
             "language":{ //定义中文
                 "search": "搜索:",
@@ -101,10 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     "previous":   "上一页"
                 }
             }
-
-
-
-        })
+        });
     })
     
 </script>
