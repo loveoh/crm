@@ -37,11 +37,11 @@ public class UserController {
      */
     @RequestMapping(value = "/validate/password",method = RequestMethod.GET)
     @ResponseBody
-    public String validatePassword(String password){
+    public String validatePassword(String oldpassword){
 
         User user = ShiroUtil.getCurrentUser();
-        password = DigestUtils.md5Hex(password);
-        if (password.equals(user.getPassword())){
+        oldpassword = DigestUtils.md5Hex(oldpassword);
+        if (oldpassword.equals(user.getPassword())){
             return "true";
         }else {
             return "false";
@@ -79,11 +79,12 @@ public class UserController {
     @RequestMapping(value = "/ip/list/load",method = RequestMethod.GET)
     @ResponseBody
     public DataTablesResult<LoginLog> load(HttpServletRequest request){
+        User user = ShiroUtil.getCurrentUser();
         String draw = request.getParameter("draw");
         String start = request.getParameter("start");
         String length = request.getParameter("length");
 
-        List<LoginLog> loginLogList = userService.findLoginLogByQueryParam(start,length);
+        List<LoginLog> loginLogList = userService.findLoginLogByQueryParam(user.getId(),start,length);
         Long count = userService.count();
 
         return new DataTablesResult<LoginLog>(draw,loginLogList,count,count);

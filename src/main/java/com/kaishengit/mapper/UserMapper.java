@@ -18,7 +18,7 @@ public interface UserMapper {
 
     void resetPassword(User user);
 
-    List<LoginLog> findLoginLogByQueryParam(String start, String length);
+    List<LoginLog> findLoginLogByQueryParam(Integer userid,String start, String length);
 
     Long count();
 

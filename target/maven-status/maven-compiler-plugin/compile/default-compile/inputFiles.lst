@@ -1,6 +1,9 @@
 G:\crm\src\main\java\com\kaishengit\pojo\Role.java
+G:\crm\src\main\java\com\kaishengit\controller\NoticeController.java
+G:\crm\src\main\java\com\kaishengit\service\NoticeService.java
 G:\crm\src\main\java\com\kaishengit\pojo\LoginLog.java
 G:\crm\src\main\java\com\qq\weixin\mp\aes\XMLParse.java
+G:\crm\src\main\java\com\kaishengit\mapper\NoticeMapper.java
 G:\crm\src\main\java\com\kaishengit\service\impl\UserServiceImpl.java
 G:\crm\src\main\java\com\qq\weixin\mp\aes\WXBizMsgCrypt.java
 G:\crm\src\main\java\com\kaishengit\controller\HomeContorller.java
@@ -8,6 +11,8 @@ G:\crm\src\main\java\com\kaishengit\controller\WeiXinController.java
 G:\crm\src\main\java\com\kaishengit\pojo\User.java
 G:\crm\src\main\java\com\qq\weixin\mp\aes\ByteGroup.java
 G:\crm\src\main\java\com\qq\weixin\mp\aes\SHA1.java
+G:\crm\src\main\java\com\kaishengit\pojo\Notice.java
+G:\crm\src\main\java\com\kaishengit\service\impl\NoticeServiceImpl.java
 G:\crm\src\main\java\com\kaishengit\mapper\RoleMapper.java
 G:\crm\src\main\java\com\kaishengit\shiro\ShiroUtil.java
 G:\crm\src\main\java\com\kaishengit\dto\AjaxRseult.java

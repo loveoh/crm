@@ -39,9 +39,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetUserPassword(String password) {
+    public void resetUserPassword(String newpassword) {
         User user = ShiroUtil.getCurrentUser();
-        user.setPassword(password);
+        user.setPassword(newpassword);
         userMapper.resetPassword(user);
     }
 
@@ -52,9 +52,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<LoginLog> findLoginLogByQueryParam(String start, String length) {
+    public List<LoginLog> findLoginLogByQueryParam(Integer userid,String start, String length) {
 
-        return userMapper.findLoginLogByQueryParam(start,length);
+        return userMapper.findLoginLogByQueryParam(userid,start,length);
     }
 
     /**

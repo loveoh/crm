@@ -5,8 +5,10 @@ com\kaishengit\shiro\ShiroDbRelm.class
 com\kaishengit\pojo\LoginLog.class
 com\kaishengit\mapper\UserMapper.class
 com\kaishengit\shiro\ShiroUtil.class
+com\kaishengit\pojo\Notice.class
 com\kaishengit\exception\ServiceException.class
 com\kaishengit\dto\AjaxRseult.class
+com\kaishengit\service\NoticeService.class
 com\kaishengit\exception\NotFoundException.class
 com\kaishengit\service\RoleService.class
 com\kaishengit\pojo\User.class
@@ -18,8 +20,11 @@ com\kaishengit\controller\HomeContorller.class
 com\qq\weixin\mp\aes\ByteGroup.class
 com\kaishengit\mapper\RoleMapper.class
 com\kaishengit\dto\DataTablesResult.class
+com\kaishengit\controller\NoticeController.class
 com\qq\weixin\mp\aes\XMLParse.class
+com\kaishengit\service\impl\NoticeServiceImpl.class
 com\qq\weixin\mp\aes\AesException.class
+com\kaishengit\mapper\NoticeMapper.class
 com\kaishengit\service\impl\UserServiceImpl.class
 com\qq\weixin\mp\aes\WXBizMsgCrypt.class
 com\kaishengit\controller\UserController.class

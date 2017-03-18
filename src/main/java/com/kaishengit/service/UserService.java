@@ -15,9 +15,9 @@ public interface UserService {
 
 
 
-    void resetUserPassword(String password);
+    void resetUserPassword(String newpassword);
 
-    List<LoginLog> findLoginLogByQueryParam(String start, String length);
+    List<LoginLog> findLoginLogByQueryParam(Integer userid,String start, String length);
 
     Long count();
 }

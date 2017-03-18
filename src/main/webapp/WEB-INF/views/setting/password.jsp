@@ -91,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     equalTo:"#newpassword"
                 }
             },
-            message:{
+            messages:{
                 oldpassword:{
                     required:"请输入原始密码",
                     remote:"原始密码错误"
