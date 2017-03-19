@@ -13,4 +13,7 @@ public interface NoticeMapper {
 
     Long count();
 
+    Notice findByNoticeId(Integer id);
+
+    void save(Notice notice);
 }

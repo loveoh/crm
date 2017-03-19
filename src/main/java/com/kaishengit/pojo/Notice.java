@@ -1,15 +1,19 @@
 package com.kaishengit.pojo;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+
 /**
  * Created by loveoh on 2017/3/18.
  */
-public class Notice {
+public class Notice implements Serializable{
 
     private Integer id;
     private String title;
-    private String createTime;
+    private Timestamp createtime;
     private Integer userid;
     private String realname;
+    private String context;
 
     public Integer getId() {
         return id;
@@ -27,12 +31,12 @@ public class Notice {
         this.title = title;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public Timestamp getCreatetime() {
+        return createtime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatetime(Timestamp createtime) {
+        this.createtime = createtime;
     }
 
     public Integer getUserid() {
@@ -49,5 +53,13 @@ public class Notice {
 
     public void setRealname(String realname) {
         this.realname = realname;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 }

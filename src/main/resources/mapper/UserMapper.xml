@@ -28,4 +28,7 @@
     <select id="count" resultType="java.lang.Long">
         SELECT count(*) FROM t_login_log
     </select>
+    <select id="findAll" resultType="com.kaishengit.pojo.User">
+        SELECT * FROM  t_user
+    </select>
 </mapper>

@@ -48,10 +48,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <thead>
                             <tr>
                                 <th>标题</th>
+                                <th>ID</th>
                                 <th>发布时间</th>
                                 <th>发布人</th>
                             </tr>
                         </thead>
+
                     </table>
                 </div>
             </div>
@@ -82,12 +84,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             "searching":false,
             serverSide:true,
 
-            ajax:"notice/list/load",
+            ajax:"/notice/list/load",
             columns:[
-                {"data":"title"},
-                {"data":"createTime"},
-                {"data":"realname"}
+                {"data":function (row) {
+                    if(row.title){
+                        return  "<a href='/notice/detail/"+row.id+"'>"+row.title+"</a>";
 
+                    }
+                }},
+                {"data":"id"},
+                {"data":function (row) {
+                    return  moment(row.createtime).format("YYYY-MM-DD HH:mm");
+                }},
+                {"data":"realname"}
             ],
 
             "language": { //定义中文

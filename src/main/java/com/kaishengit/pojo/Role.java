@@ -1,9 +1,11 @@
 package com.kaishengit.pojo;
 
+import java.io.Serializable;
+
 /**
  * Created by loveoh on 2017/3/15.
  */
-public class Role {
+public class Role implements Serializable {
 
     private Integer id;
     private String roleName;

@@ -2,6 +2,8 @@ package com.kaishengit.service;
 
 import com.kaishengit.pojo.Notice;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -12,4 +14,9 @@ public interface NoticeService {
 
     Long count();
 
+    Notice findNoticeByNoticeId(Integer id);
+
+    String saveImage(InputStream inputStream, String originalFilename) throws IOException;
+
+    void save(Notice notice);
 }

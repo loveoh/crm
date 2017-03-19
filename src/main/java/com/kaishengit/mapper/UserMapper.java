@@ -22,4 +22,6 @@ public interface UserMapper {
 
     Long count();
 
+    List<User> findAll();
+
 }

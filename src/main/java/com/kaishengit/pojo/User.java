@@ -1,12 +1,14 @@
 package com.kaishengit.pojo;
 
+import java.io.Serializable;
+
 /**
  * Created by loveoh on 2017/3/15.
  */
-public class User {
+public class User  implements Serializable{
 
     private Integer id;
-    private String usename;
+    private String username;
     private String password;
     private String realname;
     private String weixin;
@@ -25,11 +27,11 @@ public class User {
     }
 
     public String getUsename() {
-        return usename;
+        return username;
     }
 
     public void setUsename(String usename) {
-        this.usename = usename;
+        this.username = usename;
     }
 
     public String getPassword() {
