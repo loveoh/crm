@@ -33,7 +33,7 @@ public class ShiroUtil {
         return getCurrentUser().getRole().getRoleName().equals("员工");
     }
 
-    public static boolean isManager() {
+   /* public static boolean isManager() {
         return getCurrentUser().getRole().getRoleName().equals("经理");
-    }
+    }*/
 }
