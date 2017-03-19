@@ -31,4 +31,5 @@ public interface CustomerService {
     void openCust(Integer id);
 
 
+    String makeMeCard(Integer id);
 }

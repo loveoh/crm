@@ -7,6 +7,7 @@ import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -195,7 +196,40 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
+    /**
+     * 二维码内容
+     * @param id
+     * @return
+     */
+    @Override
+    public String makeMeCard(Integer id) {
+        Customer customer = customerMapper.findById(id);
 
+        StringBuilder mecard = new StringBuilder("MECARD:");
+
+        if(customer != null){
+            if(StringUtils.isNotEmpty(customer.getName())) {
+                mecard.append("N:"+customer.getName()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getTel())) {
+                mecard.append("TEL:"+customer.getTel()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getEmail())) {
+                mecard.append("EMAIL:"+customer.getEmail()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getAddress())) {
+                mecard.append("ADR:"+customer.getAddress()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getCompanyname())) {
+                mecard.append("ORG:"+customer.getCompanyname()+";");
+            }
+
+            mecard.append(";");
+        }
+
+
+        return mecard.toString();
+    }
 
 
 }

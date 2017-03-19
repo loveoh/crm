@@ -167,7 +167,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                         </div>
                         <div class="box-body" style="text-align: center">
-                            <img src="/customer/qrcode/.png" alt="">
+                            <img src="/customerManagement/qrcode/${customer.id}.png" alt="">
                         </div>
                     </div>
 
