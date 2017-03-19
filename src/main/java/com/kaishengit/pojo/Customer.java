@@ -25,7 +25,7 @@ public class Customer implements Serializable {
     private String level;
     private String type;
 
-    //一对多，sales销售机会 TODO
+    //一对多， TODO sales销售机会
     //private List<Sales> salesList;
 
     //一对多，待办事项，一个客户对应的待办事项  外键customerid

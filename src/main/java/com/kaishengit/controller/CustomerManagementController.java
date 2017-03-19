@@ -158,6 +158,7 @@ public class CustomerManagementController {
             model.addAttribute("customerList",customerService.findByCompanyId(id));
         }
 
+        System.out.println(customer.getItemsList().size());
         model.addAttribute("customer",customer);
         return "customer/show";
     }

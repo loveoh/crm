@@ -179,7 +179,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                         </div>
                         <div class="box-body">
-                            <h5>暂无代办事项</h5>
+                            <c:choose>
+                                <c:when test="${ empty customer.itemsList}">
+                                <h5>暂无代办事项</h5>
+                                </c:when>
+                                <c:otherwise>
+                                    <table class="table">
+                                        <tbody>
+                                        <c:forEach items="${customer.itemsList}" var="items">
+                                            <tr>
+                                                <td>${items.title}</td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </div>
