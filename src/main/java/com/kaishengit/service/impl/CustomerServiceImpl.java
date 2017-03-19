@@ -2,6 +2,7 @@ package com.kaishengit.service.impl;
 
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.CustomerMapper;
+import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.Customer;
 import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
@@ -23,6 +24,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerMapper customerMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 查询Customer客户信息，本登录对象的客户
@@ -229,6 +232,43 @@ public class CustomerServiceImpl implements CustomerService {
 
 
         return mecard.toString();
+    }
+
+    /**
+     * 查询所有员工
+     * @return
+     */
+    @Override
+    public List<User> findUserAll() {
+        return userMapper.findAll();
+    }
+
+    /**
+     * 转移客户，如果是公司需要关联客户转移
+     * @param id
+     * @param userid
+     */
+    @Override
+    @Transactional
+    public void moveCust(Integer id, Integer userid) {
+
+        Customer customer = customerMapper.findById(id);
+        if(customer != null) {
+            if ("company".equals(customer.getType())) {
+                List<Customer> customerList = customerMapper.findCustomerByCompanyId(id, ShiroUtil.getCurrentUserId());
+                for (Customer customer1 : customerList) {
+                    customer1.setUserid(userid);
+                    customerMapper.update(customer1);
+                }
+            }
+        } else  {
+            throw new NotFoundException();
+        }
+        customer.setUserid(userid);
+        customerMapper.update(customer);
+
+        // TODO 完成转译客户之后，需要微信通知对应的客户
+
     }
 
 

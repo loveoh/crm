@@ -13,7 +13,8 @@ import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.pojo.Customer;
 import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
-import com.sun.javafx.sg.prism.NGShape;
+
+import com.kaishengit.shiro.ShiroUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -152,7 +153,12 @@ public class CustomerManagementController {
     @ResponseBody
     public AjaxResult del(@PathVariable Integer id){
 
-        customerService.delete(id);
+        if(ShiroUtil.isManager()){
+            customerService.delete(id);
+        } else {
+            return new AjaxResult("您没有权限不能删除");
+        }
+
 
         return new AjaxResult(AjaxResult.SUCCESS,"删除成功！");
     }
@@ -171,11 +177,12 @@ public class CustomerManagementController {
             model.addAttribute("customerList",customerService.findByCompanyId(id));
         }
 
-        //TODO 查询所有员工
-        //List<User> userList = customerService.findUserAll();
+
+        List<User> userList = customerService.findUserAll();
 
         System.out.println(customer.getItemsList().size());
         model.addAttribute("customer",customer);
+        model.addAttribute("userList",userList);
         return "customer/show";
     }
 
@@ -226,5 +233,22 @@ public class CustomerManagementController {
         outputStream.close();
     }
 
+
+    /**
+     * 转移客户，是公司需要转译关联客户。
+     * @return
+     */
+    @GetMapping("/moveCust")
+    @ResponseBody
+    public AjaxResult moveCust(Integer id,Integer userid){
+        try {
+            customerService.moveCust(id, userid);
+            return  new AjaxResult(AjaxResult.SUCCESS,"转移客户成功！");
+        } catch (NotFoundException ex) {
+            ex.printStackTrace();
+            logger.error("转移客户错误");
+            return new AjaxResult("转移客户失败！");
+        }
+    }
 
 }

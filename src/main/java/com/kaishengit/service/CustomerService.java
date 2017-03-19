@@ -32,4 +32,8 @@ public interface CustomerService {
 
 
     String makeMeCard(Integer id);
+
+    List<User> findUserAll();
+
+    void moveCust(Integer id, Integer userid);
 }

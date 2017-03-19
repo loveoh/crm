@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -220,10 +221,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <input type="hidden" name="id" value="">
                     <div class="form-group" id="editCompanyList">
                         <label>请选择转入员工姓名</label>
-                        <select name="userid" class="form-control">
+                        <select name="userid" class="form-control" id="userid">
+                            <option value=""></option>
 
-                                <option value=""></option>
-
+                            <c:forEach items="${userList}" var="user">
+                                <option value="${user.id}"  selected = ${user.id == customer.userid ? 'selected':''}>${user.realname}</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </form>
@@ -361,14 +364,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-
-
             $("#moveModal").modal({
                 show: true,
                 backdrop: 'static',
                 keyboard: false
             });
 
+        });
+
+        //转移客户
+        $("#moveBtn").click(function () {
+
+            var userid=$("#userid").val();
+            layer.confirm('如果是公司会自动转移关联客户，您确定要继续吗?', function(index){
+                $.get("/customerManagement/moveCust",{"id":${customer.id},"userid":userid}).done(function (json) {
+
+                    if(json.status == "success"){
+                        layer.msg("客户转移成功！");
+                        window.location.href="/customerManagement";
+                    } else {
+                        layer.msg(json.message);
+                    }
+                }).error(function () {
+                    layer.msg("服务器繁忙请稍候再试！");
+                });
+
+                layer.close(index);
+            });
         });
 
 
