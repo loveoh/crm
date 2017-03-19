@@ -1,6 +1,7 @@
 package com.kaishengit.service;
 
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.User;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface CustomerService {
     Customer findCustomer(Integer id);
 
     List<Customer> findByCompanyId(Integer id);
+
+    void openCust(Integer id);
+
+
 }

@@ -331,6 +331,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/plugins/datepicker/bootstrap-datepicker.js"></script>
 <script src="/static/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
 <script src="/static/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+<script>
 
+    $(function() {
+
+        //公开客户，userid为null
+        $("#openCust").click(function () {
+            layer.confirm('如果是公司会自动公开关联客户，您确定要继续吗?', function(index){
+
+                $.post("/customerManagement/" + ${customer.id} + "/openCust").done(function (json) {
+                    if(json.status =="success"){
+                        layer.msg("客户已经公开");
+                        window.location.href = "/customerManagement";
+                    } else {
+                        layer.msg(json.message);
+                    }
+
+                }).error(function () {
+                    layer.msg("服务器繁忙，请稍候再试！");
+                });
+
+                layer.close(index);
+            });
+        });
+
+        //转移客户
+        $("#moveCust").click(function () {
+
+
+
+
+
+            $("#moveModal").modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+
+        });
+
+
+
+
+    });
+</script>
 </body>
 </html>

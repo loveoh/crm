@@ -3,6 +3,7 @@ package com.kaishengit.service.impl;
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.CustomerMapper;
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
 
@@ -86,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Customer findById(Integer id) {
-        return customerMapper.findById(id,ShiroUtil.getCurrentUserId());
+        return customerMapper.findById(id);
     }
 
     /**
@@ -122,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        Customer customer = customerMapper.findById(id,ShiroUtil.getCurrentUserId());
+        Customer customer = customerMapper.findById(id);
 
         if(customer != null){
             //1删除客户或者公司
@@ -130,7 +131,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             if("company".equals(customer.getType())){
                 //2删除公司的关联
-                customerMapper.deleteByCompanyId(customer.getId());
+                customerMapper.deleteByCompanyId(customer.getId(),ShiroUtil.getCurrentUserId());
             }
         } else {
             throw new NotFoundException();
@@ -161,6 +162,40 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> findByCompanyId(Integer id) {
         return customerMapper.findCustomerByCompanyId(id,ShiroUtil.getCurrentUserId());
     }
+
+    /**
+     * 公开客户---公司就要公开关联客户
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void openCust(Integer id) {
+
+        Customer customer = customerMapper.findById(id);
+        if(customer != null){
+            customer.setUserid(null);
+
+            if("company".equals(customer.getType())){
+                List<Customer> customerList = customerMapper.findCustomerByCompanyId(customer.getId(),ShiroUtil.getCurrentUserId());
+
+                for(Customer customer1 : customerList){
+                    customer1.setUserid(null);
+                    customerMapper.update(customer1);
+                }
+
+            }
+
+        } else {
+            throw new NotFoundException();
+        }
+        customerMapper.update(customer);
+
+        //TODO  公开客户之后，发一条公告或者发一个微信企业号(通知，公司的话包括关联客户)
+
+
+    }
+
+
 
 
 }

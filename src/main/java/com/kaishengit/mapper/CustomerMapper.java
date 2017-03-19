@@ -25,13 +25,13 @@ public interface CustomerMapper {
 
     Customer findCompanyById(@Param("companyid") Integer companyid,@Param("userid")Integer userid);
 
-    Customer findById(@Param("id") Integer id, @Param("userid") Integer userid);
+    Customer findById(@Param("id") Integer id);
 
     void update(Customer customer);
 
     void deleteById(Integer id);
 
-    void deleteByCompanyId(Integer companyid);
+    void deleteByCompanyId(@Param("companyid") Integer companyid, @Param("userid") Integer userid);
 
     Customer findCustomer(@Param("id") Integer id, @Param("userid") Integer userid);
 

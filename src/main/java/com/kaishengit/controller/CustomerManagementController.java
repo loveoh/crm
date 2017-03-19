@@ -5,6 +5,7 @@ import com.kaishengit.dto.AjaxResult;
 import com.kaishengit.dto.DataTablesResult;
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
 import com.sun.javafx.sg.prism.NGShape;
 import org.slf4j.Logger;
@@ -135,7 +136,7 @@ public class CustomerManagementController {
      * @param id
      * @return
      */
-    @GetMapping("/{id:\\d+}/del")
+    @GetMapping("/del/{id:\\d+}")
     @ResponseBody
     public AjaxResult del(@PathVariable Integer id){
 
@@ -158,10 +159,30 @@ public class CustomerManagementController {
             model.addAttribute("customerList",customerService.findByCompanyId(id));
         }
 
+        //TODO 查询所有员工
+        //List<User> userList = customerService.findUserAll();
+
         System.out.println(customer.getItemsList().size());
         model.addAttribute("customer",customer);
         return "customer/show";
     }
 
+
+    /**
+     * 公开客户，需要userid字段为空
+     */
+    @PostMapping("/{id:\\d+}/openCust")
+    @ResponseBody
+    public AjaxResult openCust(@PathVariable Integer id){
+
+        try {
+            customerService.openCust(id);
+            return new AjaxResult(AjaxResult.SUCCESS,"客户公开成功！");
+        } catch (NotFoundException ex) {
+            ex.printStackTrace();
+            logger.error("找不到id为{}的custmoer",id);
+            return new AjaxResult("客户公开失败！");
+        }
+    }
 
 }

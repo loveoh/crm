@@ -27,7 +27,7 @@
     <!--delete by companyid-->
     <delete id="deleteByCompanyId">
 
-        DELETE FROM t_customer WHERE companyid = #{companyid}
+        DELETE FROM t_customer WHERE companyid = #{companyid} and userid = #{userid}
 
     </delete>
 
@@ -77,7 +77,7 @@
     </select>
     <select id="findById" resultType="com.kaishengit.pojo.Customer">
         SELECT id,name, tel, weixin, address, email, createtime,
-        userid, companyid, companyname, level, type FROM  t_customer WHERE  id = #{id} and userid = #{userid}
+        userid, companyid, companyname, level, type FROM  t_customer WHERE  id = #{id}
     </select>
 
     <select id="findCustomerByCompanyId" resultType="com.kaishengit.pojo.Customer">
@@ -100,8 +100,10 @@
         left join t_items on t_customer.id = t_items.customerid
         left join t_sales on t_customer.id = t_sales.custmoerid
 
-        WHERE t_customer.id = #{id} and t_customer.userid = #{userid} and t_items.userid = #{userid}
-        and t_sales.userid = #{userid}
+        where
+
+        t_customer.id = #{id} and t_customer.userid = #{userid}
+
 
     </select>
 

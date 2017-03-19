@@ -531,7 +531,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 layer.confirm('如果是公司会自动删除关联数据，您确定要删除吗?', function(index){
                     //do something
-                    $.get("/customerManagement/"+ id +"/del").done(function (json) {
+                    $.get("/customerManagement/del/"+ id).done(function (json) {
                         if(json.status=="success"){
                             layer.msg("删除成功！");
                             datatable.ajax.reload(false,null);
