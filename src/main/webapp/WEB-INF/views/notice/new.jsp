@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>凯盛CRM-用户密码设置</title>
+    <title>凯盛CRM | 新增公告</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -18,40 +18,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="/static/plugins/simditor/styles/simditor.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
     <%@include file="../include/mainHeader.jsp"%>
-    <%@include file="../include/leftSide.jsp"%>
+    <jsp:include page="../include/leftSide.jsp">
+        <jsp:param name="menu" value="notice"/>
+    </jsp:include>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+
         <!-- Main content -->
         <section class="content">
 
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">设置密码</h3>
+                    <h3 class="box-title">新增公告</h3>
                 </div>
                 <div class="box-body">
-                    <form method="post" id="changePasswordForm">
+                    <form method="post" id="newForm">
                         <div class="form-group">
-                            <label>旧密码</label>
-                            <input type="password" class="form-control" name="oldpassword">
+                            <label>标题</label>
+                            <input type="text" name="title" class="form-control" id="title">
                         </div>
                         <div class="form-group">
-                            <label>新密码</label>
-                            <input type="password" class="form-control" name="newpassword" id="newpassword">
-                        </div>
-                        <div class="form-group">
-                            <label>确认密码</label>
-                            <input type="password" class="form-control" name="replypassword">
+                            <label>公告内容</label>
+                            <textarea name="context" id="context" rows="10" class="form-control"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="box-footer">
-                    <button id="saveBtn" class="btn btn-primary pull-right">保存</button>
+                    <button id="saveBtn" class="btn btn-primary pull-right">发表</button>
                 </div>
             </div>
 
@@ -70,65 +70,57 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/dist/js/app.min.js"></script>
+<script src="/static/plugins/simditor/scripts/module.min.js"></script>
+<script src="/static/plugins/simditor/scripts/hotkeys.min.js"></script>
+<script src="/static/plugins/simditor/scripts/uploader.min.js"></script>
+<script src="/static/plugins/simditor/scripts/simditor.min.js"></script>
 <script src="/static/plugins/validate/jquery.validate.min.js"></script>
 <script>
     $(function(){
-        $("#changePasswordForm").validate({
+        var editor = new Simditor({
+            textarea: $('#context'),
+            placeholder:"请输入内容",
+            upload:{
+                url:"/notice/img/upload",
+                fileKey:"file"
+            }
+        });
+
+        $("#newForm").validate({
             errorClass:"text-danger",
-            errorElement:"sapn",
+            errorElement:"span",
             rules:{
-                oldpassword:{
-                    required:true,
-                    remote:"/user/validate/password"
-                },
-                newpassword:{
-                    required:true,
-                    rangelength:[6,18]
-                },
-                replypassword:{
-                    required:true,
-                    rangelength:[6,18],
-                    equalTo:"#newpassword"
+                title:{
+                    required:true
                 }
             },
             messages:{
-                oldpassword:{
-                    required:"请输入原始密码",
-                    remote:"原始密码错误"
-                },
-                newpassword:{
-                    required:"请输入新密码",
-                    rangelength:"密码的长度必须是6到18"
-                },
-                replypassword:{
-                    required:"请输入确认密码",
-                    rangelength:"密码的长度必须是6到18",
-                    equalTo:"密码不一致"
+                title:{
+                    required:"主题不能为空"
                 }
             },
             submitHandler:function () {
-                var password = $("#oldpassword").val();
-                $.post("/user/reset/password",{"password":password}).done(function (data) {
-
-                    if(data.status == "success"){
-                        alert("密码修改成功,请重新登录");
-                        window.location.href = "/";
-                    }
-
-                }).error(function () {
-                    alert("服务器异常");
-                })
+               $.ajax({
+                   url:"/notice/new",
+                   type:"post",
+                   data:$("#newForm").serialize(),
+                   success:function (data) {
+                       if (data.status == "success"){
+                           window.location.href = "/notice/list/load";
+                       }
+                   },
+                   error:function () {
+                       alert("服务器异常")
+                   }
+               })
             }
         })
 
-        //提交表单
         $("#saveBtn").click(function () {
-            $("#changePasswordForm").submit();
+            $("#newForm").submit();
         })
 
-    })
-
-
+    });
 </script>
 </body>
 </html>

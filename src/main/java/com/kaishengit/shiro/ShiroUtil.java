@@ -19,4 +19,21 @@ public class ShiroUtil {
     public static Integer getCurrentUserId(){
         return getCurrentUser().getId();
     }
+
+
+    public static String getCurrentRealName() {
+        return getCurrentUser().getRealname();
+    }
+
+    public static boolean isAdmin() {
+        return getCurrentUser().getRole().getRoleName().equals("管理员");
+    }
+
+    public static boolean isEmployee() {
+        return getCurrentUser().getRole().getRoleName().equals("员工");
+    }
+
+    public static boolean isManager() {
+        return getCurrentUser().getRole().getRoleName().equals("经理");
+    }
 }

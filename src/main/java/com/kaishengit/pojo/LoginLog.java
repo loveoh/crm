@@ -1,9 +1,11 @@
 package com.kaishengit.pojo;
 
+import java.io.Serializable;
+
 /**
  * Created by loveoh on 2017/3/18.
  */
-public class LoginLog {
+public class LoginLog implements Serializable{
 
     private Integer id;
     private String ip;
