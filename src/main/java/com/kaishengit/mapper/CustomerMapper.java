@@ -33,7 +33,6 @@ public interface CustomerMapper {
 
     void deleteByCompanyId(@Param("companyid") Integer companyid, @Param("userid") Integer userid);
 
-    Customer findCustomer(@Param("id") Integer id, @Param("userid") Integer userid);
 
     List<Customer> findCustomerByCompanyId(@Param("id") Integer id, @Param("userid") Integer userid);
 }

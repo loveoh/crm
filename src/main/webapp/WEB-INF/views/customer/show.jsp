@@ -247,19 +247,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <h4 class="modal-title">新增待办事项</h4>
             </div>
             <div class="modal-body">
-                <form id="newTaskForm" action="/customer/task/new" method="post">
-                    <input type="hidden" name="custid" value="${customer.id}">
+                <form id="newTaskForm" action="/task/new" method="post">
+                    <input type="hidden" name="customerid" value="${customer.id}">
                     <div class="form-group">
                         <label>待办内容</label>
                         <input type="text" class="form-control" name="title" id="task_title">
                     </div>
                     <div class="form-group">
                         <label>开始日期</label>
-                        <input type="text" class="form-control" name="start" id="start_time">
+                        <input type="text" class="form-control" name="startTime" id="start_time">
                     </div>
                     <div class="form-group">
                         <label>结束日期</label>
-                        <input type="text" class="form-control" name="end" id="end_time">
+                        <input type="text" class="form-control" name="endTime" id="end_time">
                     </div>
                     <div class="form-group">
                         <label>提醒时间</label>
@@ -335,6 +335,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
 <script src="/static/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script src="/static/plugins/layer/layer.js"></script>
+<script src="/static/plugins/moment.js"></script>
+<script src="/static/plugins/validate/jquery.validate.min.js"></script>
 <script>
 
     $(function() {
@@ -357,6 +359,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 layer.close(index);
             });
+        });
+
+        //添加待办事项表单验证
+        $("#newTaskForm").validate({
+
+            errorElement:"span",
+            errorClass:"text-danger",
+            rules:{
+                "title":{
+                    required:true
+                },
+                "startTime":{
+                    required:true
+                },
+                "endTime":{
+                    required:true
+                },
+                "color":{
+                    required:true
+                }
+            },
+            messages:{
+                "title":{
+                    required:"必填字段"
+                },
+                "startTime":{
+                    required:"必填字段"
+                },
+                "endTime":{
+                    required:"必填字段"
+                },
+                "color":{
+                    required:"必填字段"
+                }
+            },
+            submitHandler:function () {
+
+                $.post("/task/new",$("#newTaskForm").serialize()).done(function(result){
+                    if(result.status == "success") {
+
+
+                        window.history.go(0);
+                    }
+                }).error(function(){
+                    layer.msg("服务器异常");
+                });
+
+            }
+
+
         });
 
         //转移客户
@@ -394,8 +446,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
 
+        $('#start_time').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayBtn: 'linked',
+            language: 'zh-CN',
+            startDate:moment().format()
+        }).on('changeDate', function(ev){
+            if(ev.date){  //ev.date.valueOf()选择时间的毫秒数，ev.date是完全时间，包含时区
+                $(endSelector).datepicker('setStartDate', new Date(ev.date.valueOf()))
+            }else{
+                $(endSelector).datepicker('setStartDate',null);
+            }
+        })
+
+        var endSelector = $('#end_time').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayBtn: 'linked',
+            language: 'zh-CN',
+
+        });
 
 
+        $("#newTask").click(function () {
+
+
+            $("#newTaskModal").modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+
+        $("#color").colorpicker({
+            color:'#61a5e8'
+        });
+
+        //添加待办事项
+        $("#saveTaskBtn").click(function () {
+
+            if(!$("#task_title").val()) {
+                $("#task_title").focus();
+                return;
+            }
+            if(!$("#start_time").val()) {
+                $("#start_time").focus();
+                return;
+            }
+            if(!$("#end_time").val()) {
+                $("#end_time").focus();
+                return;
+            }
+            /*开始时间在结束时间之后*/
+            if(moment($("#start_time").val()).isAfter(moment($("#end_time").val()))) {
+                layer.msg("结束时间必须大于开始时间");
+                return;
+            }
+
+            $("#newTaskForm").submit();
+        });
     });
 </script>
 </body>

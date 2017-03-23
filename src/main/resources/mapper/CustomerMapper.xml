@@ -85,62 +85,6 @@
         userid, companyid, companyname, level, type FROM  t_customer WHERE  companyid = #{id} and userid = #{userid}
     </select>
 
-    <!--id  多表联查            left join t_sales on t_customer.id = t_sales.custmoerid-->
-    <select id="findCustomer" resultMap="map">
 
-        select t_customer.id as cust_id,t_customer.name, t_customer.tel, t_customer.weixin, t_customer.address,
-        t_customer.email, t_customer.createtime,t_customer.userid as cust_userid,
-        t_customer.companyid, t_customer.companyname,t_customer.level, t_customer.type,
-
-        t_items.id as items_id, t_items.title,  t_items.create_time,  t_items.create_user,  t_items.start_time,
-         t_items.end_time, t_items.color,  t_items.remind_time,
-         t_items.done,  t_items.customerid,  t_items.salesid,  t_items.userid as items_userid,t_sales.*
-
-        from t_customer
-        left join t_items on t_customer.id = t_items.customerid
-        left join t_sales on t_customer.id = t_sales.custmoerid
-
-        where
-
-        t_customer.id = #{id} and t_customer.userid = #{userid}
-
-
-    </select>
-
-
-    <resultMap id="map" type="Customer">
-        <id column="cust_id" property="id"/>
-        <result property="name" column="name"/>
-        <result property="tel" column="tel"/>
-        <result property="weixin" column="weixin"/>
-        <result property="address" column="address"/>
-        <result property="email" column="email"/>
-        <result property="createtime" column="createtime"/>
-        <result property="userid" column="cust_userid"/>
-        <result property="companyid" column="companyid"/>
-        <result property="companyname" column="companyname"/>
-        <result property="level" column="level"/>
-        <result property="type" column="type"/>
-
-        <!--Items待办事项-->
-        <collection property="itemsList" ofType="com.kaishengit.pojo.Items">
-            <id property="id" column="items_id"/>
-            <result property="title" column="title"/>
-            <result property="createTime" column="create_time"/>
-            <result property="createUser" column="create_user"/>
-            <result property="startTime" column="start_time"/>
-            <result property="endTime" column="end_time"/>
-            <result property="color" column="color"/>
-            <result property="done" column="done"/>
-            <result property="customerid" column="customerid"/>
-            <result property="salesid" column="salesid"/>
-            <result property="userid" column="items_userid"/>
-        </collection>
-
-        <!--sales销售机会-->
-        <!--<collection property="salesList" ofType="com.kaishengit.pojo.Sales">
-            <id property="id" column="id"/>
-        </collection>&ndash;&gt;-->
-    </resultMap>
 
 </mapper>

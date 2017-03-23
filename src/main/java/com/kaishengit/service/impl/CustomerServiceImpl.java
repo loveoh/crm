@@ -2,8 +2,10 @@ package com.kaishengit.service.impl;
 
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.CustomerMapper;
+import com.kaishengit.mapper.ItemsMapper;
 import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.Items;
 import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
@@ -26,6 +28,8 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ItemsMapper itemsMapper;
 
     /**
      * 查询Customer客户信息，本登录对象的客户
@@ -152,8 +156,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findCustomer(Integer id) {
 
+        Customer customer = customerMapper.findById(id);
 
-        return customerMapper.findCustomer(id,ShiroUtil.getCurrentUserId());
+        List<Items> itemsList  = itemsMapper.findByCustAndUser(id,ShiroUtil.getCurrentUserId());
+
+        //TODO 关联销售机会
+
+
+        customer.setItemsList(itemsList);
+        return customer;
 
     }
 
