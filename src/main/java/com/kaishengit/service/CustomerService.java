@@ -22,11 +22,8 @@ public interface CustomerService {
 
     void eidtCustomer(Customer customer);
 
-<<<<<<< HEAD
-
-
     List<Customer> findCustomerByUserId(Integer id);
-=======
+
     void delete(Integer id);
 
     Customer findCustomer(Integer id);
@@ -41,5 +38,4 @@ public interface CustomerService {
     List<User> findUserAll();
 
     void moveCust(Integer id, Integer userid);
->>>>>>> 2f30d3f42a4598c0e53125d7cfb8c6b09accb127
 }
