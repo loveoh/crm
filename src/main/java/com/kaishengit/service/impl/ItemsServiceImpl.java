@@ -39,6 +39,10 @@ public class ItemsServiceImpl implements ItemsService {
 
         itemsMapper.save(items);
 
+        /*新增待办事项时，通知功能*/
+        //TODO Quartz动态任务，定时器规定时间通知
+
+
     }
 
     /**
