@@ -213,7 +213,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
         //显示所有用户
-        var dataTables = $('#customerTable').DataTable({
+        var datatable = $('#customerTable').DataTable({
             "lengthMenu": [5, 10, 15, 20],
             "serverSide": true,
             "ajax": {
@@ -234,11 +234,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }},
                 {"data":function (row) {
                     if(row.name != null && row.companyname == null){
-                        return "<a href=''>" + row.name + "</a>";
+                        return "<a href='/customerManagement/"+ row.id +"'>" + row.name + "</a>";
                     } else if(row.name == null && row.companyname != null){
-                        return "<a href=''>" + row.companyname + "</a>";
+                        return "<a href='/customerManagement/"+ row.id +"'>" + row.companyname + "</a>";
                     } else if(row.name != null && row.companyname != null){
-                        return "<a href=''>" + row.name + "</a> - <a href=''>" + row.companyname + "</a>";
+                        return "<a href='/customerManagement/" + row.id + "'>" + row.name + "</a> - <a href='/customerManagement/"+ row.companyid +"'>" + row.companyname + "</a>";
                     }
                 }},
                 {"data":"tel"},
@@ -323,7 +323,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $.post("/customerManagement/newCustmoer",$("#newForm").serialize()).done(function (json) {
                     if(json.status == "success"){
                         layer.msg("添加成功！");
-                        window.history.go(0);
+                        datatable.ajax.reload(false,null);
                     } else {
                         layer.msg(json.message);
                     }
@@ -339,6 +339,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $("#newBtn").click(function () {
             //重置表单
             $("#newForm")[0].reset();
+
+            if($("#radioPerson")[0].checked){
+
+                $("#custOrCompany").attr("name","name");
+                $("#_name").html("客户名称");
+            }
+
 
             //获取所有公司
             $.get("/customerManagement/company").done(function (json) {
@@ -500,7 +507,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $.post("/customerManagement/eidt",$("#editForm").serialize()).done(function (json) {
                     if(json.status == "success"){
                         layer.msg("修改成功！");
-                        window.history.go(0);
+                        datatable.ajax.reload(false,null);
                     } else {
                         layer.msg(json.message);
                     }
@@ -524,8 +531,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 layer.confirm('如果是公司会自动删除关联数据，您确定要删除吗?', function(index){
                     //do something
-                    $.get("/customerManagement/"+ id +"/del").done(function (json) {
-                        
+                    $.get("/customerManagement/del/"+ id).done(function (json) {
+                        if(json.status=="success"){
+                            layer.msg("删除成功！");
+                            datatable.ajax.reload(false,null);
+
+                        } else {
+                            layer.msg(json.message);
+                        }
+
                     }).error(function () {
                         layer.msg("服务器繁忙，请稍后再试！");
                     });

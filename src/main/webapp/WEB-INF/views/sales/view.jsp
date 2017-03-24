@@ -176,7 +176,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <form id="newLogForm" action="/sales/log/new" method="post">
                     <input type="hidden" name="salesid" value="${sales.id}">
                     <div class="form-group">
-                        <textarea name="context" id="context"></textarea>
+                        <textarea name="content" id="context"></textarea>
                     </div>
                 </form>
             </div>

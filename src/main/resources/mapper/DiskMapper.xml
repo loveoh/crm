@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaishengit.mapper.DiskMapper">
+
+    <cache/>
+
+    <!--save-->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT  INTO  t_disk (source_name, new_name, size, fid, create_time, create_user, type)
+        VALUES (#{sourceName},#{newName},#{size},#{fid},#{createTime},#{createUser},#{type})
+    </insert>
+
+    <!--select by id-->
+    <select id="findById" resultType="Disk">
+        SELECT * FROM t_disk WHERE id = #{id}
+    </select>
+
+    <!--select by fid-->
+    <select id="findByFid" resultType="Disk">
+        SELECT * FROM t_disk WHERE fid = #{fid}
+    </select>
+
+</mapper>

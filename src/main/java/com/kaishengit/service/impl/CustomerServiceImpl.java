@@ -2,11 +2,18 @@ package com.kaishengit.service.impl;
 
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.CustomerMapper;
+import com.kaishengit.mapper.ItemsMapper;
+import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.Items;
+import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
 import com.kaishengit.shiro.ShiroUtil;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,9 +26,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerMapper customerMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private ItemsMapper itemsMapper;
 
     /**
-     * 查询Customer客户信息
+     * 查询Customer客户信息，本登录对象的客户
      * @param start  起始行
      * @param length  查多少个
      * @param search  查询关键字，根据手机号或者name，like查询
@@ -30,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getCustomer(Integer start, Integer length, String search) {
 
-        return customerMapper.findBySearch(start,length,search);
+        return customerMapper.findBySearch(start,length,search,ShiroUtil.getCurrentUserId());
 
     }
 
@@ -41,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public Integer getCustomerCount(String search) {
-        return customerMapper.findBySearchCount(search);
+        return customerMapper.findBySearchCount(search,ShiroUtil.getCurrentUserId());
     }
 
     /**
@@ -50,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public List<Customer> findCompany() {
-        return customerMapper.findCompanyAll();
+        return customerMapper.findCompanyAll(ShiroUtil.getCurrentUserId());
 
     }
 
@@ -63,14 +74,14 @@ public class CustomerServiceImpl implements CustomerService {
 
         if("customer".equals(customer.getType()) && customer.getCompanyid()!= null) {//个人+公司
 
-            Customer customer1 = customerMapper.findCompanyById(customer.getCompanyid());
+            Customer customer1 = customerMapper.findCompanyById(customer.getCompanyid(),ShiroUtil.getCurrentUserId());
             if (customer1 != null) {
                 customer.setCompanyname(customer1.getCompanyname());
             } else {
                 throw new NotFoundException();
             }
         }
-        //TODO 添加当前用户（员工）的id    shiro
+
         customer.setUserid(ShiroUtil.getCurrentUserId());
 
         customerMapper.save(customer);
@@ -98,7 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if("customer".equals(customer.getType())&&customer.getCompanyid()!= null){
             //个人-公司，有companyid，companyname,并且根据companyid查到companyname,修改的是个人名字
-            Customer customer2 = customerMapper.findCompanyById(customer.getCompanyid());
+            Customer customer2 = customerMapper.findCompanyById(customer.getCompanyid(),ShiroUtil.getCurrentUserId());
             if (customer2 != null) {
                 customer.setCompanyname(customer2.getCompanyname());
             } else {
@@ -110,6 +121,164 @@ public class CustomerServiceImpl implements CustomerService {
 
         customerMapper.update(customer);
 
+
+    }
+
+    /**
+     * 删除，  公司的话删除全部关联的
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        Customer customer = customerMapper.findById(id);
+
+        if(customer != null){
+            //1删除客户或者公司
+            customerMapper.deleteById(id);
+
+            if("company".equals(customer.getType())){
+                //2删除公司的关联
+                customerMapper.deleteByCompanyId(customer.getId(),ShiroUtil.getCurrentUserId());
+            }
+        } else {
+            throw new NotFoundException();
+        }
+
+
+    }
+
+    /**
+     * show展示客户详情---关联销售机会，待办事项，电子名片。三个关系维护
+     * @param id
+     * @return
+     */
+    @Override
+    public Customer findCustomer(Integer id) {
+
+        Customer customer = customerMapper.findById(id);
+
+        List<Items> itemsList  = itemsMapper.findByCustAndUser(id,ShiroUtil.getCurrentUserId());
+
+        //TODO 关联销售机会
+
+
+        customer.setItemsList(itemsList);
+        return customer;
+
+    }
+
+    /**
+     * 查询此公司关联所有客户
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Customer> findByCompanyId(Integer id) {
+        return customerMapper.findCustomerByCompanyId(id,ShiroUtil.getCurrentUserId());
+    }
+
+    /**
+     * 公开客户---公司就要公开关联客户
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void openCust(Integer id) {
+
+        Customer customer = customerMapper.findById(id);
+        if(customer != null){
+            customer.setUserid(null);
+
+            if("company".equals(customer.getType())){
+                List<Customer> customerList = customerMapper.findCustomerByCompanyId(customer.getId(),ShiroUtil.getCurrentUserId());
+
+                for(Customer customer1 : customerList){
+                    customer1.setUserid(null);
+                    customerMapper.update(customer1);
+                }
+
+            }
+
+        } else {
+            throw new NotFoundException();
+        }
+        customerMapper.update(customer);
+
+        //TODO  公开客户之后，发一条公告或者发一个微信企业号(通知，公司的话包括关联客户)
+
+
+    }
+
+    /**
+     * 二维码内容
+     * @param id
+     * @return
+     */
+    @Override
+    public String makeMeCard(Integer id) {
+        Customer customer = customerMapper.findById(id);
+
+        StringBuilder mecard = new StringBuilder("MECARD:");
+
+        if(customer != null){
+            if(StringUtils.isNotEmpty(customer.getName())) {
+                mecard.append("N:"+customer.getName()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getTel())) {
+                mecard.append("TEL:"+customer.getTel()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getEmail())) {
+                mecard.append("EMAIL:"+customer.getEmail()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getAddress())) {
+                mecard.append("ADR:"+customer.getAddress()+";");
+            }
+            if(StringUtils.isNotEmpty(customer.getCompanyname())) {
+                mecard.append("ORG:"+customer.getCompanyname()+";");
+            }
+
+            mecard.append(";");
+        }
+
+
+        return mecard.toString();
+    }
+
+    /**
+     * 查询所有员工
+     * @return
+     */
+    @Override
+    public List<User> findUserAll() {
+        return userMapper.findAll();
+    }
+
+    /**
+     * 转移客户，如果是公司需要关联客户转移
+     * @param id
+     * @param userid
+     */
+    @Override
+    @Transactional
+    public void moveCust(Integer id, Integer userid) {
+
+        Customer customer = customerMapper.findById(id);
+        if(customer != null) {
+            if ("company".equals(customer.getType())) {
+                List<Customer> customerList = customerMapper.findCustomerByCompanyId(id, ShiroUtil.getCurrentUserId());
+                for (Customer customer1 : customerList) {
+                    customer1.setUserid(userid);
+                    customerMapper.update(customer1);
+                }
+            }
+        } else  {
+            throw new NotFoundException();
+        }
+        customer.setUserid(userid);
+        customerMapper.update(customer);
+
+        // TODO 完成转译客户之后，需要微信通知对应的客户
 
     }
 

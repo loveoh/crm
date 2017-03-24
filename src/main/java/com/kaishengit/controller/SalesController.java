@@ -148,6 +148,6 @@ public class SalesController {
     public String newLog(SalesRecord salesRecord){
 
         salesRecordService.saveNewSalesRecord(salesRecord);
-        return "redirect:/sales" +salesRecord.getSalesid();
+        return "redirect:/sales/" +salesRecord.getSalesid();
     }
 }

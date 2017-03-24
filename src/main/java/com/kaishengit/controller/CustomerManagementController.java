@@ -1,18 +1,34 @@
 package com.kaishengit.controller;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.kaishengit.dto.AjaxResult;
 
 import com.kaishengit.dto.DataTablesResult;
 import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.pojo.Customer;
+import com.kaishengit.pojo.User;
 import com.kaishengit.service.CustomerService;
+
+import com.kaishengit.shiro.ShiroUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 刘忠伟 on 2017/3/15.
@@ -128,6 +144,111 @@ public class CustomerManagementController {
     }
 
 
+    /**
+     * 删除 ，     公司的话和删除所有关联的
+     * @param id
+     * @return
+     */
+    @GetMapping("/del/{id:\\d+}")
+    @ResponseBody
+    public AjaxResult del(@PathVariable Integer id){
 
+        if(ShiroUtil.isManager()){
+            customerService.delete(id);
+        } else {
+            return new AjaxResult("您没有权限不能删除");
+        }
+
+
+        return new AjaxResult(AjaxResult.SUCCESS,"删除成功！");
+    }
+
+
+    /**
+     * 根据id查找，并且展示
+     */
+    @GetMapping("{id:\\d+}")
+    public String show(@PathVariable Integer id, Model model){
+
+        Customer customer = customerService.findCustomer(id);
+
+        //如果是公司，则返回所有关联用户
+        if("company".equals(customer.getType())){
+            model.addAttribute("customerList",customerService.findByCompanyId(id));
+        }
+
+
+        List<User> userList = customerService.findUserAll();
+
+        System.out.println(customer.getItemsList().size());
+        model.addAttribute("customer",customer);
+        model.addAttribute("userList",userList);
+        return "customer/show";
+    }
+
+
+    /**
+     * 公开客户，需要userid字段为空
+     */
+    @PostMapping("/{id:\\d+}/openCust")
+    @ResponseBody
+    public AjaxResult openCust(@PathVariable Integer id){
+
+        try {
+            customerService.openCust(id);
+            return new AjaxResult(AjaxResult.SUCCESS,"客户公开成功！");
+        } catch (NotFoundException ex) {
+            ex.printStackTrace();
+            logger.error("找不到id为{}的custmoer",id);
+            return new AjaxResult("客户公开失败！");
+        }
+    }
+
+
+    /**
+     * 返回二维码
+     */
+    @GetMapping("/qrcode/{id:\\d+}.png")
+    @ResponseBody
+    public void testEncode(@PathVariable Integer id, HttpServletResponse response) throws WriterException, IOException {
+
+        String mecard =customerService.makeMeCard(id);
+
+        MultiFormatWriter multiFormatWriter=new MultiFormatWriter();
+        Map<EncodeHintType,String> hints=new HashMap<EncodeHintType,String>();
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        BitMatrix bitMatrix= null;
+
+        bitMatrix = multiFormatWriter.encode(mecard, BarcodeFormat.QR_CODE, 200, 200, hints);
+        OutputStream outputStream = response.getOutputStream();
+
+
+        //放入输出流或者响应输出流
+
+
+        MatrixToImageWriter.writeToStream(bitMatrix, "jpg", outputStream);
+
+
+        outputStream.flush();
+        outputStream.close();
+    }
+
+
+    /**
+     * 转移客户，是公司需要转译关联客户。
+     * @return
+     */
+    @GetMapping("/moveCust")
+    @ResponseBody
+    public AjaxResult moveCust(Integer id,Integer userid){
+        try {
+            customerService.moveCust(id, userid);
+            return  new AjaxResult(AjaxResult.SUCCESS,"转移客户成功！");
+        } catch (NotFoundException ex) {
+            ex.printStackTrace();
+            logger.error("转移客户错误");
+            return new AjaxResult("转移客户失败！");
+        }
+    }
 
 }
