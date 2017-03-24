@@ -283,4 +283,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+
+    /**
+     * 根据userid查找客户信息
+     * @param userid
+     * @return
+     */
+    @Override
+    public List<Customer> findCustomerByUserId(Integer userid) {
+        return customerMapper.findByUserId(userid);
+    }
+
+
 }

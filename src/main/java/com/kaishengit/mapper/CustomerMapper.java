@@ -29,10 +29,14 @@ public interface CustomerMapper {
 
     void update(Customer customer);
 
+<<<<<<< HEAD
+    List<Customer> findByUserId(Integer userid);
+=======
     void deleteById(Integer id);
 
     void deleteByCompanyId(@Param("companyid") Integer companyid, @Param("userid") Integer userid);
 
 
     List<Customer> findCustomerByCompanyId(@Param("id") Integer id, @Param("userid") Integer userid);
+>>>>>>> 2f30d3f42a4598c0e53125d7cfb8c6b09accb127
 }

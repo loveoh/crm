@@ -106,7 +106,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                    data:$("#newForm").serialize(),
                    success:function (data) {
                        if (data.status == "success"){
-                           window.location.href = "/notice/list/load";
+                           window.location.href = "/notice";
                        }
                    },
                    error:function () {
