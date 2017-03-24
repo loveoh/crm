@@ -65,6 +65,8 @@ public class ShiroDbRelm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
+
+        System.out.println("============");
         //在contorller里面调用的此方法。传入的token是一个子类。需要强转
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)authenticationToken;
         //获取传过来的username.get方法是类里面封装的

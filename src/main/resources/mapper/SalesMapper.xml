@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaishengit.mapper.SalesMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_sales (name,price,custmoerid,custname,progress,userid,username) VALUES
+        (#{name},#{price},#{custmoerid},#{custname},#{progress},#{userid},#{username})
+    </insert>
+    <update id="update">
+        UPDATE t_sales SET progress = #{progress}, lasttime = #{lasttime},successtime = #{successtime}
+        where id = #{id}
+    </update>
+    <update id="updateLastTime">
+        UPDATE t_sales SET lasttime = #{lasttime}where id = #{id}
+    </update>
+    <delete id="deleteBySalesId">
+        delete FROM t_sales WHERE id = #{salesid}
+    </delete>
+    <select id="count" resultType="java.lang.Long">
+        SELECT count(*) FROM  t_sales;
+    </select>
+    <select id="findByQueryParam" resultType="com.kaishengit.pojo.Sales">
+        SELECT * FROM t_sales
+        <where>
+            <if test="progress != null and progress != ''">
+                progress = #{progress}
+            </if>
+            <if test="name !=null and name != ''">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and createtime &gt; #{startTime} and createtime  &lt; #{endTime}
+            </if>
+        </where>
+        ORDER BY id DESC limit ${start},${length}
+    </select>
+    <select id="findById" resultType="com.kaishengit.pojo.Sales">
+        select * FROM  t_sales where id = #{id}
+    </select>
+</mapper>

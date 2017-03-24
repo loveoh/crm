@@ -27,4 +27,6 @@ public interface CustomerMapper {
     Customer findById(Integer id);
 
     void update(Customer customer);
+
+    List<Customer> findByUserId(Integer userid);
 }

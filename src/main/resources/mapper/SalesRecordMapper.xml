@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaishengit.mapper.SalesRecordMapper">
+    <insert id="save">
+        INSERT INTO t_sales_record (content,salesid,type) VALUES (#{content},#{salesid},#{type})
+    </insert>
+    <select id="findBySalesId" resultType="com.kaishengit.pojo.SalesRecord">
+        SELECT * from t_sales_record WHERE salesid = #{id} order by id desc
+    </select>
+</mapper>

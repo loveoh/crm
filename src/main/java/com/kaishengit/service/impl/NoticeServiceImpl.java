@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
 import java.util.List;
@@ -45,6 +46,7 @@ public class NoticeServiceImpl implements NoticeService {
      * @return
      */
     @Override
+    @ResponseBody
     public String saveImage(InputStream inputStream, String originalFilename) throws IOException {
         String sufName = originalFilename.substring(originalFilename.lastIndexOf("."));
         String newName = UUID.randomUUID().toString() + sufName;

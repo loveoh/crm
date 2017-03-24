@@ -99,8 +99,9 @@ public class NoticeController {
     public AjaxResult addNotice (Notice notice){
 
         noticeService.save(notice);
+        //TODO  微信通知
 
-        return new AjaxResult(AjaxResult.SUCCESS);
+        return new AjaxResult(AjaxResult.SUCCESS,"success");
     }
 
     /**

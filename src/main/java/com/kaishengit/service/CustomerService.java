@@ -20,4 +20,8 @@ public interface CustomerService {
     Customer findById(Integer id);
 
     void eidtCustomer(Customer customer);
+
+
+
+    List<Customer> findCustomerByUserId(Integer id);
 }

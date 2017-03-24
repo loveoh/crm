@@ -31,6 +31,7 @@ public class HomeContorller {
 
     @GetMapping
     public String home(){
+
         return "login";
     }
 

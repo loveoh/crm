@@ -2,10 +2,12 @@ package com.kaishengit.shiro;
 
 import com.kaishengit.pojo.User;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by loveoh on 2017/1/22.
  */
+@Component
 public class ShiroUtil {
 
     public static User getCurrentUser(){
