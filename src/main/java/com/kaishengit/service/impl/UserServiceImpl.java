@@ -1,6 +1,7 @@
 package com.kaishengit.service.impl;
 
 import com.kaishengit.controller.HomeContorller;
+import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.mapper.UserMapper;
 import com.kaishengit.pojo.LoginLog;
 import com.kaishengit.pojo.User;
@@ -66,6 +67,22 @@ public class UserServiceImpl implements UserService {
         return userMapper.count();
     }
 
+    /**
+     * 根据id查找
+     * @param id
+     * @return
+     */
+    @Override
+    public User findById(Integer id) {
+
+        User user = userMapper.findById(id);
+
+        if(user != null){
+            return user;
+        } else {
+            throw  new NotFoundException();
+        }
+    }
 
 
 }

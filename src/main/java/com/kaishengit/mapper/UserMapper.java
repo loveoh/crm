@@ -2,6 +2,7 @@ package com.kaishengit.mapper;
 
 import com.kaishengit.pojo.LoginLog;
 import com.kaishengit.pojo.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,11 @@ public interface UserMapper {
 
     List<User> findAll();
 
+    List<User> findUsers(@Param("start") Integer start, @Param("length")Integer length, @Param("search")String search);
+
+    Long findUsersCount(@Param("search")String search);
+
+    void save(User user);
+
+    void update(User user);
 }

@@ -9,8 +9,17 @@
     <insert id="saveLoginLog">
         INSERT into t_login_log (ip,userid) VALUES (#{param1},#{param2})
     </insert>
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        INSERT into t_user (username, password, realname, weixin, roleid)
+        VALUES (#{usename},#{password},#{realname},#{weixin},#{roleid})
+    </insert>
     <update id="resetPassword">
         UPDATE t_user set password = #{password} where id = #{id}
+    </update>
+
+    <update id="update">
+            UPDATE t_user set username=#{usename},realname=#{realname},weixin=#{weixin},
+            roleid=#{roleid},enable=#{enable},password = #{password} where id = #{id}
     </update>
 
 
@@ -30,5 +39,26 @@
     </select>
     <select id="findAll" resultType="com.kaishengit.pojo.User">
         SELECT * FROM  t_user
+    </select>
+    <!--用户管理返回用户datatables-->
+    <select id="findUsers" resultType="com.kaishengit.pojo.User">
+        select t_user.*,t_role.view_name as 'role.viewName'
+        from t_user left  join t_role
+        on t_user.roleid = t_role.id
+        <where>
+             <if test="search != null and search != ''">
+                 username LIKE concat("%",#{search},"%") or realname LIKE concat("%",#{search},"%")
+             </if>
+         </where>
+        limit ${start},${length}
+    </select>
+
+    <select id="findUsersCount" resultType="java.lang.Long">
+        SELECT count(*) FROM t_user
+        <where>
+            <if test="search != null and search != ''">
+                username LIKE concat("%",#{search},"%") or realname LIKE concat("%",#{search},"%")
+            </if>
+        </where>
     </select>
 </mapper>

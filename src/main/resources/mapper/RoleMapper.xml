@@ -6,4 +6,8 @@
         SELECT * FROM  t_role WHERE id = #{roleid}
     </select>
 
+    <select id="findAll" resultType="com.kaishengit.pojo.Role">
+        SELECT * FROM  t_role
+    </select>
+
 </mapper>

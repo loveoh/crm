@@ -1,7 +1,9 @@
 package com.kaishengit.controller;
 
+import com.kaishengit.dto.AjaxResult;
 import com.kaishengit.dto.AjaxRseult;
 import com.kaishengit.dto.DataTablesResult;
+import com.kaishengit.exception.NotFoundException;
 import com.kaishengit.pojo.LoginLog;
 import com.kaishengit.pojo.User;
 import com.kaishengit.service.UserService;
@@ -9,9 +11,7 @@ import com.kaishengit.shiro.ShiroUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -89,4 +89,23 @@ public class UserController {
 
         return new DataTablesResult<LoginLog>(draw,loginLogList,count,count);
     }
+
+    /**
+     * 根据id查找用户信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id:\\d+}")
+    @ResponseBody
+    public AjaxResult userById(@PathVariable Integer id){
+
+        try {
+            User user = userService.findById(id);
+            return new AjaxResult(user);
+        }catch (NotFoundException ex){
+            ex.printStackTrace();
+            return new AjaxResult(ex.getMessage());
+        }
+    }
+
 }

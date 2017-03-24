@@ -20,4 +20,6 @@ public interface UserService {
     List<LoginLog> findLoginLogByQueryParam(Integer userid,String start, String length);
 
     Long count();
+
+    User findById(Integer id);
 }

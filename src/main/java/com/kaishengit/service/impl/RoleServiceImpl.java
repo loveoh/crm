@@ -6,6 +6,8 @@ import com.kaishengit.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by loveoh on 2017/3/18.
  */
@@ -18,5 +20,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findRoleByRoleId(Integer roleid) {
         return  roleMapper.findByRoleId(roleid);
+    }
+
+    /**
+     * 查询全部role
+     * @return
+     */
+    @Override
+    public List<Role> findRoleAll(){
+            return roleMapper.findAll();
     }
 }
